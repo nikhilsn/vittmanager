@@ -6,13 +6,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:vm/Pages/HomePage.dart';
+import 'package:vm/Pages/OptionaPage.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
 
 import 'Login.dart';
-import 'Resources/SupportDialogs.dart';
-import 'Resources/title_text.dart';
-
+import '../Resources/SupportDialogs.dart';
+import '../Resources/title_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SignUpDetails extends StatefulWidget {
   bool email;
@@ -155,6 +157,7 @@ class SignUpDetailsState extends State<SignUpDetails> {
   }
 
   Future<String> verifyEmail(String email, String password) async {
+    SupportDialogs().ProcessingDialog(context);
     print("verify hua");
     try {
       AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -213,30 +216,26 @@ class SignUpDetailsState extends State<SignUpDetails> {
 
   Widget emailVerificationField() {
     return verified
-        ? Card(
-            color: ColorsTheme.secondryColor,
-            child: Container(
-                padding: EdgeInsets.all(70),
-                child: Column(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.done,
-                        size: 30,
-                        color: ColorsTheme.secondryColor,
-                      ),
-                    ),
-                    Text(
-                      "A Verification Email Is Sent to $email",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )),
-          )
+        ? Container(
+            padding: EdgeInsets.all(70),
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.done,
+                    size: 30,
+                    color: ColorsTheme.secondryColor,
+                  ),
+                ),
+                Text(
+                  "A Verification Email Is Sent to $email",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ))
         : Container(
             color: Colors.white,
             child: Column(
@@ -345,120 +344,131 @@ class SignUpDetailsState extends State<SignUpDetails> {
 
   Widget mobileVerificationField() {
     return verified
-        ? Card(
-            color: ColorsTheme.primaryColor,
+        ? Container(
+            padding: EdgeInsets.all(70),
+            child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.done,
+                    size: 30,
+                    color: ColorsTheme.primaryColor,
+                  ),
+                ),
+                Text(
+                  "Phone Number Verified",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ))
+        : Expanded(
             child: Container(
-                padding: EdgeInsets.all(70),
-                child: Column(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.done,
-                        size: 30,
-                        color: ColorsTheme.primaryColor,
-                      ),
-                    ),
-                    Text(
-                      "Phone Number Verified",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )),
-          )
-        : Card(
-            elevation: 0,
-            color: Colors.white,
-            child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    !codeSent
-                        ? Card(
-                            margin: EdgeInsets.only(left: 25, right: 25),
-                            elevation: 0,
-                            color: Colors.white,
-                            child: Column(
-                              children: <Widget>[
-//                            TextFormField(
-//                              keyboardType: TextInputType.text,
-//                              decoration: InputDecoration(
-//                                hintText: "Enter Your Name",
-//                              ),
-//                              onChanged: (val) {
-//                                setState(() {
-//                                  this.name = val;
-//                                });
-//                              },
-//                              // ignore: missing_return
-//                              validator: (String value) {
-//                                if (value.isEmpty) {
-//                                  return "This Field Can't Be Empty";
-//                                }
-//                              },
-//                            ),
-//                            SizedBox(
-//                              height: 20,
-//                            ),
-                                TextFormField(
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter phone number',
-                                  ),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      this.phoneNo = val;
-                                    });
-                                  },
-                                  // ignore: missing_return
-                                  validator: (String value) {
-                                    if (value.isEmpty) {
-                                      return "Enter Phone Number";
-                                    }
-                                    if (value.length != 10) {
-                                      return "Please Enter 10 digit mobile number";
-                                    }
-                                  },
-                                )
-                              ],
-                            ))
-                        : Container(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    codeSent
-                        ? Padding(
-                            padding: EdgeInsets.only(left: 25.0, right: 25.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.phone,
-                              decoration:
-                                  InputDecoration(hintText: 'Enter OTP'),
-                              onChanged: (val) {
-                                setState(() {
-                                  this.smsCode = val;
-                                });
-                              },
-                              // ignore: missing_return
-                              validator: (String value) {
-                                if (value.isEmpty) {
-                                  return "Enter OTP";
-                                }
-                                if (value.length != 6) {
-                                  return "Please Enter 6 Digit OTP Number";
-                                }
-                              },
-                            ))
-                        : Container(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _sendButton()
-                  ],
-                )));
+                margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        !codeSent
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    // color: Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1)),
+                                child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 25.0, right: 25.0),
+                                    child: TextFormField(
+                                      style: GoogleFonts.aBeeZee(
+                                          color: Colors.white),
+                                      cursorColor: Colors.white,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: InputDecoration(
+                                        hintStyle: GoogleFonts.aBeeZee(
+                                            color: Colors.white),
+                                        fillColor: Colors.white,
+                                        focusColor: Colors.white,
+                                        hoverColor: Colors.white,
+                                        hintText: 'Enter phone number',
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                      ),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          this.phoneNo = val;
+                                        });
+                                      },
+                                      // ignore: missing_return
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Enter Phone Number";
+                                        }
+                                        if (value.length != 10) {
+                                          return "Please Enter 10 digit mobile number";
+                                        }
+                                      },
+                                    )),
+                              )
+                            : Container(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        codeSent
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    // color: Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1)),
+                                child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 25.0, right: 25.0),
+                                    child: TextFormField(
+                                      style: GoogleFonts.aBeeZee(
+                                          color: Colors.white),
+                                      keyboardType: TextInputType.phone,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter OTP',
+                                        hintStyle: GoogleFonts.aBeeZee(
+                                            color: Colors.white),
+                                        border: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                        fillColor: Colors.white,
+                                        focusColor: Colors.white,
+                                        hoverColor: Colors.white,
+                                      ),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          this.smsCode = val;
+                                        });
+                                      },
+                                      // ignore: missing_return
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Enter OTP";
+                                        }
+                                        if (value.length != 6) {
+                                          return "Please Enter 6 Digit OTP Number";
+                                        }
+                                      },
+                                    )),
+                              )
+                            : Container(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _sendButton()
+                      ],
+                    ))),
+          );
   }
 
   //---------VERIFY/LOGIN BUTTON
@@ -475,8 +485,15 @@ class SignUpDetailsState extends State<SignUpDetails> {
           margin: EdgeInsets.only(bottom: 10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              color: ColorsTheme.primaryDark,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white, width: 1),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.8),
+                    offset: Offset(0, 0),
+                    blurRadius: 6)
+              ]),
           child: Wrap(
             alignment: WrapAlignment.center,
             children: <Widget>[
@@ -526,18 +543,23 @@ class SignUpDetailsState extends State<SignUpDetails> {
 
   //----------SIGN IN WITH OTP----------
   signInWithOTP(smsCode, verId) {
+    SupportDialogs().ProcessingDialog(context);
     AuthCredential authCreds = PhoneAuthProvider.getCredential(
         verificationId: verId, smsCode: smsCode);
+    Navigator.pop(context);
     phoneData(authCreds);
   }
 
-  phoneData(authCreds) {
+  phoneData(authCreds) async {
     if (authCreds != null) {
+      SupportDialogs().ProcessingDialog(context);
       phoneNumber = "+91$phoneNo";
       SharedPref().setPhoneNumber(phoneNumber);
+      Navigator.pop(context);
       setState(() {
         verified = true;
       });
+      callNextPage();
     }
   }
 
@@ -552,8 +574,9 @@ class SignUpDetailsState extends State<SignUpDetails> {
           ),
           Container(
             margin: EdgeInsets.only(left: 20),
-            child: Text("Have A Referal Code? Enter Here",
-                ),
+            child: Text(
+              "Have A Referal Code? Enter Here",
+            ),
           ),
           Row(
             children: <Widget>[
@@ -663,6 +686,20 @@ class SignUpDetailsState extends State<SignUpDetails> {
     );
   }
 
+  callNextPage(){
+    SharedPref().getOptionalPage().then((value){
+      if(value==null || value==false){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => OptionPage()));
+      }else{
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+
+    });
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -678,6 +715,9 @@ class SignUpDetailsState extends State<SignUpDetails> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: ColorsTheme.primaryDark,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -690,8 +730,8 @@ class SignUpDetailsState extends State<SignUpDetails> {
                 ),
                 Text(
                   "Please Fill Missing Details",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.aBeeZee(
+                      color: Colors.white, fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
@@ -701,10 +741,6 @@ class SignUpDetailsState extends State<SignUpDetails> {
 //                    ? emailVerificationField()
 //                    :
                 emailb ? mobileVerificationField() : emailVerificationField(),
-                SizedBox(
-                  height: 20,
-                ),
-                referalCodeField()
               ],
             ),
           ),

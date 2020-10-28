@@ -1,17 +1,14 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart';
+import 'package:vm/Pages/SignUpDetails.dart';
 import 'package:vm/Resources/Color.dart';
+import 'package:vm/Resources/SupportDialogs.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
-
+import '../Resources/title_text.dart';
 import 'HomePage.dart';
-import 'Resources/SupportDialogs.dart';
-import 'Resources/title_text.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -40,6 +37,8 @@ class HomePageStateClass extends State<Login> {
     SharedPref().setEmail(email);
     SharedPref().setPhotoUrl(url);
     SharedPref().setPhoneNumber(phoneNumber);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SignUpDetails(true)));
   }
 
 //   saveDataToserver(
@@ -87,6 +86,7 @@ class HomePageStateClass extends State<Login> {
 //   }
 
   Future signInWithGoogle() async {
+    SupportDialogs().ProcessingDialog(context);
     try {
       GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
@@ -97,9 +97,10 @@ class HomePageStateClass extends State<Login> {
 
       AuthResult result = await _auth.signInWithCredential(credential);
       user = result.user;
-//      setState(() {
-//        isUserLogin=true;
-//      });
+      Navigator.pop(context);
+      setState(() {
+        isUserLogin = true;
+      });
 //      assert(googleSignIn.currentUser.email == user.email);
       saveDataToPreferences(user.uid, user.displayName, user.email,
           user.photoUrl, user.phoneNumber);
@@ -122,32 +123,42 @@ class HomePageStateClass extends State<Login> {
 
   //---------GOOGLE SIGN BUTTON---------
   Widget _signInButton() {
-    return RaisedButton(
-      color: Colors.white,
-      // splashColor: LightColor.navyBlue1,
-      elevation: 3,
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         signInWithGoogle();
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'Sign in with Google',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
+      child: Container(
+        decoration: BoxDecoration(
+            color: ColorsTheme.primaryDark,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: Colors.white, width: 1),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.8),
+                  offset: Offset(0, 0),
+                  blurRadius: 6)
+            ]),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(
+                  image: AssetImage("assets/other/google_logo.png"),
+                  height: 35.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Sign in with Google',
+                  style: GoogleFonts.aBeeZee(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -155,65 +166,96 @@ class HomePageStateClass extends State<Login> {
 
   //----------PHONE SIGN IN WIDGET------------
   Widget _phoneSignin() {
-    return Card(
-        elevation: 6,
+    return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
-        color: Colors.white,
         child: Form(
             key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 !codeSent
-                    ? Card(
-                        margin: EdgeInsets.only(left: 25, right: 25),
-                        elevation: 0,
-                        color: Colors.white,
-                        child: TextFormField(
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            hintText: 'Enter phone number',
-                          ),
-                          onChanged: (val) {
-                            setState(() {
-                              this.phoneNo = val;
-                            });
-                          },
-                          // ignore: missing_return
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return "Enter Phone Number";
-                            }
-                            if (value.length != 10) {
-                              return "Please Enter 10 digit mobile number";
-                            }
-                          },
-                        ))
+                    ? Container(
+                        decoration: BoxDecoration(
+                            // color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.white, width: 1)),
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                            child: TextFormField(
+                              style: GoogleFonts.aBeeZee(color: Colors.white),
+                              cursorColor: Colors.white,
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                hintStyle:
+                                    GoogleFonts.aBeeZee(color: Colors.white),
+                                fillColor: Colors.white,
+                                focusColor: Colors.white,
+                                hoverColor: Colors.white,
+                                hintText: 'Enter phone number',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  this.phoneNo = val;
+                                });
+                              },
+                              // ignore: missing_return
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return "Enter Phone Number";
+                                }
+                                if (value.length != 10) {
+                                  return "Please Enter 10 digit mobile number";
+                                }
+                              },
+                            )),
+                      )
                     : Container(),
                 SizedBox(
                   height: 10,
                 ),
                 codeSent
-                    ? Padding(
-                        padding: EdgeInsets.only(left: 25.0, right: 25.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(hintText: 'Enter OTP'),
-                          onChanged: (val) {
-                            setState(() {
-                              this.smsCode = val;
-                            });
-                          },
-                          // ignore: missing_return
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return "Enter OTP";
-                            }
-                            if (value.length != 6) {
-                              return "Please Enter 6 Digit OTP Number";
-                            }
-                          },
-                        ))
+                    ? Container(
+                        decoration: BoxDecoration(
+                            // color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.white, width: 1)),
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                            child: TextFormField(
+                              style: GoogleFonts.aBeeZee(color: Colors.white),
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                hintStyle:
+                                    GoogleFonts.aBeeZee(color: Colors.white),
+                                hintText: 'Enter OTP',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                fillColor: Colors.white,
+                                focusColor: Colors.white,
+                                hoverColor: Colors.white,
+                              ),
+                              onChanged: (val) {
+                                setState(() {
+                                  this.smsCode = val;
+                                });
+                              },
+                              // ignore: missing_return
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return "Enter OTP";
+                                }
+                                if (value.length != 6) {
+                                  return "Please Enter 6 Digit OTP Number";
+                                }
+                              },
+                            )),
+                      )
                     : Container(),
                 SizedBox(
                   height: 10,
@@ -235,15 +277,29 @@ class HomePageStateClass extends State<Login> {
       },
       child: Container(
           margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              color: ColorsTheme.primaryDark,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white, width: 1),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.8),
+                    offset: Offset(0, 0),
+                    blurRadius: 6)
+              ]),
+          // decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.all(Radius.circular(15))),
           child: Wrap(
             alignment: WrapAlignment.center,
             children: <Widget>[
-              TitleText(
-                text: codeSent ? "Login" : "Verify",
+              Text(
+                codeSent ? "Login" : "Verify",
+                style: GoogleFonts.aBeeZee(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
             ],
           )),
@@ -429,52 +485,73 @@ class HomePageStateClass extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset : false,
-     body: Container(
-        color: ColorsTheme.primaryColor,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Positioned(
-              left: -100,
-              right: -100,
-              top: -120,
-              child: CircleAvatar(
-                  radius: 230,
-                  backgroundColor: ColorsTheme.secondryColor,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: [
                       SizedBox(
                         height: 30,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 100),
+                      Expanded(
                         child: Text(
                           "Welcome To Vitt Manager",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 40),
-                          maxLines: 2,
+                          overflow: TextOverflow.visible,
+                          style: GoogleFonts.aBeeZee(
+                              color: Colors.black, fontSize: 40),
+                          maxLines: 4,
                           textAlign: TextAlign.center,
                         ),
                       ),
+                      Image.asset(
+                        "assets/vm/logo1.png",
+                        height: MediaQuery.of(context).size.width / 2,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
                     ],
-                  )),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 20,),
-                _phoneSignin(),
-                SizedBox(
-                  height: 20,
+                  ),
                 ),
-                _signInButton(),
-              ],
-            ),
-          ],
-        )));
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorsTheme.primaryDark,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, -3),
+                            blurRadius: 6)
+                      ]),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _phoneSignin(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _signInButton(),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

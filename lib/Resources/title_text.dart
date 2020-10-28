@@ -4,7 +4,7 @@ import 'package:vm/Resources/Color.dart';
 class TitleText extends StatelessWidget {
   final String text;
   final double fontSize;
-  Color color= ColorsTheme.primaryColor;
+  Color color= Colors.white;
   TitleText(
       {Key key,
       this.text,

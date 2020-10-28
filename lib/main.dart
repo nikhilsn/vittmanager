@@ -13,15 +13,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Vitt Manager',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: ColorsTheme.primaryColor,
+        primaryColor: ColorsTheme.primaryColor,
         accentColor: ColorsTheme.secondryColor,
         primaryColorDark: ColorsTheme.primaryDark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SafeArea(
-        child:UserCheck(),
-    ),
+        child: UserCheck(),
+      ),
     );
   }
 }

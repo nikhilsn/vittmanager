@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:vm/Resources/Color.dart';
+
 
 
 class SupportDialogs {
@@ -18,7 +21,10 @@ class SupportDialogs {
                 borderRadius: BorderRadius.circular(20)
             ),
             child: Center(
-              child: Text("Loading..."),
+              child:SpinKitDoubleBounce(
+                color: ColorsTheme.primaryDark,
+                size: 32,
+              ),
             ),
           );
         },

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "107852375726",
+    "firebase_url": "https://vittmanager-a9b25.firebaseio.com",
+    "project_id": "vittmanager-a9b25",
+    "storage_bucket": "vittmanager-a9b25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107852375726:android:3604c06a7d3a2f97f86f3f",
+        "android_client_info": {
+          "package_name": "com.createwealth.vm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107852375726-fltb86g2slkdnr0a7qk5gerbg4ri4kgi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.createwealth.vm",
+            "certificate_hash": "d699939430d1e24801d42f18e388b4bbacbdb23c"
+          }
+        },
+        {
+          "client_id": "107852375726-dm5dtukutcmab16vguerua91f4ib323t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_46gbE2_hqE27jeyNIAXaLhejGd_zdYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107852375726-dm5dtukutcmab16vguerua91f4ib323t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

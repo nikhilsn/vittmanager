@@ -7,6 +7,7 @@ import 'Pages/InfoPage.dart';
 import 'file:///C:/Users/Nikhil/AndroidStudioProjects/CreateWealth/vm/lib/Pages/Login.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class UserCheck extends StatefulWidget {
   @override
@@ -66,14 +67,12 @@ class UserCheckClass extends State<UserCheck> {
     page = Container(
         color: ColorsTheme.secondryColor,
         child: Center(
-            child: Text(
-              "Loading",
-              style: TextStyle(color: Colors.black, fontSize: 18),
-            )));
+            child: SpinKitDoubleBounce(
+          color: Colors.white,
+          size: 32,
+        )));
 
     getDataFromPreferences();
-
-
   }
 
   @override

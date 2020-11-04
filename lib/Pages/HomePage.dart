@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
-import 'package:vm/HeadText.dart';
+import 'file:///C:/Users/Nikhil/AndroidStudioProjects/CreateWealth/vm/lib/Widgets/HeadText.dart';
 import 'package:vm/Pages/NavigationPages/ExpanseTracker.dart';
 import 'package:vm/Pages/NavigationPages/HomeScreen.dart';
 import 'package:vm/Pages/NavigationPages/Profile.dart';

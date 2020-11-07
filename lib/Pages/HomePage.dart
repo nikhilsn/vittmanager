@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
 import 'file:///C:/Users/Nikhil/AndroidStudioProjects/CreateWealth/vm/lib/Widgets/HeadText.dart';
 import 'package:vm/Pages/NavigationPages/ExpanseTracker.dart';
 import 'package:vm/Pages/NavigationPages/HomeScreen.dart';
 import 'package:vm/Pages/NavigationPages/Profile.dart';
+import 'package:vm/Pages/OptionaPage.dart';
 import 'package:vm/Resources/Color.dart';
-import 'package:vm/Resources/Strings.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:vm/Services/bottom_navigation_service.dart';
+
+import 'package:vm/Services/option_page_service.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'InfoPage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,6 +32,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   String photoUrl;
 
   int selectedIndex = 0;
+  var bnbSelector;
 
   var pages=[
     HomeScreen(),
@@ -63,6 +66,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() {
         this.photoUrl = url == "null" ? "" : url;
       });
+    });
+    SharedPref().getOptionalPage().then((val) {
+      if(val!=null) {
+          OptionPageService().setTrue();
+      }
     });
   }
 
@@ -241,18 +249,16 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget bnb() {
-    return BottomNavigationBar(
+    return  BottomNavigationBar(
         showSelectedLabels: true,
         showUnselectedLabels: false,
         backgroundColor: ColorsTheme.primaryColor,
         elevation: 5,
-        currentIndex: selectedIndex,
+        currentIndex: bnbSelector.getPage(),
         fixedColor: Colors.white,
         unselectedItemColor: Colors.white,
         onTap: (int index) {
-          setState(() {
-            selectedIndex = index;
-          });
+          Provider.of<BottomNavigationService>(context, listen: false).setPageNumber(index);
         },
         items: [
           BottomNavigationBarItem(
@@ -283,16 +289,28 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     getDataFromPreferences();
   }
+  //
+  // return optionPage?  Scaffold(
+  // key: _key,
+  // bottomNavigationBar: bnb(),
+  // body: pages[selectedIndex] ,
+  // ): OptionPage();
+
+  // Consumer<OptionPageService>(
+  // builder: (context, ops, child){
+  // return ops.get()?pages[selectedIndex]: OptionPage();
+  // },
+  // );
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        key: _key,
-        bottomNavigationBar: bnb(),
-        body: pages[selectedIndex],
-      ),
-    );
+
+    final opsp=Provider.of<OptionPageService>(context, listen: true);
+    bnbSelector= Provider.of<BottomNavigationService>(context, listen: true);
+  return  opsp.get()?Scaffold(
+      key: _key,
+      bottomNavigationBar: bnb(),
+      body: pages[bnbSelector.getPage()] ,
+      ): OptionPage();
   }
 }

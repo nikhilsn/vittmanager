@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vm/Pages/Login.dart';
 import 'package:vm/Pages/OptionaPage.dart';
+import 'package:vm/Services/firebase_auth_services.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
 import 'HomePage.dart';
-import 'InfoPage.dart';
-import 'file:///C:/Users/Nikhil/AndroidStudioProjects/CreateWealth/vm/lib/Pages/Login.dart';
-import 'package:vm/Resources/Color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 class UserCheck extends StatefulWidget {
   @override
@@ -18,65 +16,47 @@ class UserCheckClass extends State<UserCheck> {
   var dataLoaded = false;
   var userExist = false;
   Widget page;
-  bool optionalPage = false;
+  bool optionPage = false;
 
-  getDataFromPreferences() async {
-    SharedPref().getOptionalPage().then((value) {
-      if (value != null) {
-        setState(() {
-          optionalPage = value;
-        });
-      }
-      check();
-    });
+  getDataSharedPreferences() async {
+
   }
 
-  check() async {
-    Future<FirebaseUser> u = FirebaseAuth.instance.currentUser();
-    u.then((FirebaseUser us) {
-      // setState(() {
-      //   if (us != null) {
-      //     dataLoaded = true;
-      //     userExist = true;
-      //   } else {
-      //     dataLoaded = true;
-      //     userExist = false;
-      //   }
-      // });
-
-      if (us != null) {
-        if (optionalPage) {
-          setState(() {
-            page = HomePage();
-          });
-        } else {
-          setState(() {
-            page = OptionPage();
-          });
+  Widget getOption(){
+    SharedPref().getOptionalPage().then((value) {
+      if (value != null) {
+        if (value) {
+          optionPage=value;
         }
-      } else {
-        setState(() {
-          page = InfoPage();
-        });
       }
+      return optionPage? HomePage():OptionPage();
     });
+
   }
 
   @override
   void initState() {
-    page = Container(
-        color: ColorsTheme.secondryColor,
-        child: Center(
-            child: SpinKitDoubleBounce(
-          color: Colors.white,
-          size: 32,
-        )));
-
-    getDataFromPreferences();
+    getDataSharedPreferences();
   }
 
   @override
   Widget build(BuildContext context) {
-    return page;
+    final _authServices =
+        Provider.of<FirebaseAuthService>(context, listen: true);
+
+    return StreamBuilder<User>(
+      stream: _authServices.onAuthStateChanged,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final user = snapshot.data;
+          return user != null ? HomePage() : LoginPage();
+        }
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 }

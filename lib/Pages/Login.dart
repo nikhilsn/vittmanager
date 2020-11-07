@@ -5,17 +5,19 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vm/Pages/SignUpDetails.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:vm/Resources/SupportDialogs.dart';
+import 'package:vm/Services/firebase_auth_services.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
 import '../Resources/title_text.dart';
 import 'HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class Login extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
   HomePageStateClass createState() => HomePageStateClass();
 }
 
-class HomePageStateClass extends State<Login> {
+class HomePageStateClass extends State<LoginPage> {
   var isUserLogin = false;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -125,7 +127,8 @@ class HomePageStateClass extends State<Login> {
   Widget _signInButton() {
     return GestureDetector(
       onTap: () {
-        signInWithGoogle();
+        // signInWithGoogle();
+        signInMethod();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -377,110 +380,24 @@ class HomePageStateClass extends State<Login> {
     signIn(authCreds);
   }
 
-  //-----------BUTTON CLOSE RECORD---------
-  Widget _buSave() {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-        child: Text(
-          "Save",
-          // style: GoogleFonts.aBeeZee(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        decoration: BoxDecoration(
-            color: ColorsTheme.primaryColor,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color(0xffb9b9b9),
-                  offset: Offset(0, 0),
-                  blurRadius: 10),
-            ]),
-      ),
-      onTap: () {
-        if (nameFormKey.currentState.validate()) {
-          setState(() {
-            nameExist = true;
-          });
-          SharedPref().setName(name);
-          Navigator.of(context, rootNavigator: true).pop("dialog");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        }
-      },
-    );
-  }
-
-  //---------NAME DIALOG WIDGET----------
-//  void getDialog() {
-//    var dialog = Dialog(
-//        shape:
-//            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-//        child: StatefulBuilder(
-//            builder: (BuildContext context, StateSetter setState) {
-//          return Container(
-//              margin: EdgeInsets.all(20),
-//              child: ListView(
-//                shrinkWrap: true,
-//                children: <Widget>[
-//                  SizedBox(
-//                    height: 10,
-//                  ),
-//                  Text(
-//                    "Enter Your Name ",
-//                    style: GoogleFonts.aBeeZee(
-//                      color: LightColor.navyBlue2,
-//                      fontWeight: FontWeight.w700,
-//                    ),
-//                    textAlign: TextAlign.center,
-//                  ),
-//                  SizedBox(
-//                    height: 20,
-//                  ),
-//                  Form(
-//                      key: nameFormKey,
-//                      child: TextFormField(
-//                        decoration: InputDecoration(
-//                          hintText: 'Enter Your Name',
-//                        ),
-//                        onChanged: (val) {
-//                          setState(() {
-//                            this.name = val;
-//                          });
-//                        },
-//                        // ignore: missing_return
-//                        validator: (String value) {
-//                          if (value.isEmpty) {
-//                            return "Enter Your Name";
-//                          }
-//                        },
-//                      )),
-//                  SizedBox(
-//                    height: 40,
-//                  ),
-//                  Container(
-//                    padding: EdgeInsets.only(left: 40, right: 40),
-//                    child: _buSave(),
-//                  )
-//                ],
-//              ));
-//        })
-////
-//        );
-//
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        return dialog;
-//      },
-//    );
-//  }
-
   @override
   void initState() {
     super.initState();
-//    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
   }
+
+  Future signInMethod() async {
+    SupportDialogs().ProcessingDialog(context);
+    try {
+      final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+      final user = await auth.signInWithGoogle();
+      Navigator.pop(context);
+      print(user.uid);
+    } catch (err) {
+      print(err);
+      Navigator.pop(context);
+
+    }
+   }
 
   @override
   Widget build(BuildContext context) {

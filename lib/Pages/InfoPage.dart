@@ -22,13 +22,13 @@ class InfoPageState extends State<InfoPage> {
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login()));
+                            MaterialPageRoute(builder: (context) => LoginPage()));
                       },
                       child: Text("Click here to goto Login Page")),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login()));
+                            MaterialPageRoute(builder: (context) => LoginPage()));
                       },
                       child: Text("Second Text"))
                 ],

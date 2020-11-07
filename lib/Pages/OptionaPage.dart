@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:vm/Pages/HomePage.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:vm/Resources/Strings.dart';
+import 'package:vm/Services/option_page_service.dart';
 import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
+import 'package:provider/provider.dart';
 
 class OptionPage extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class OptionPage extends StatefulWidget {
 
 class OptionPageState extends State<OptionPage> {
   String uName = "";
+  bool optionPage = false;
 
   getDataSharedPreferences() async {
     SharedPref().getName().then((value) {
@@ -49,8 +52,8 @@ class OptionPageState extends State<OptionPage> {
   Widget getSkipButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        Provider.of<OptionPageService>(context, listen: false).setTrue();
+        print("onclick");
       },
       child: Padding(
         padding:
@@ -82,11 +85,12 @@ class OptionPageState extends State<OptionPage> {
   void initState() {
     super.initState();
 
-    getDataSharedPreferences();
   }
 
   @override
   Widget build(BuildContext context) {
+    getDataSharedPreferences();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -130,7 +134,13 @@ class OptionPageState extends State<OptionPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            getButton(Strings.personalFinanceManagement),
+            GestureDetector(
+                onTap: () {
+                  SharedPref().setOptionalPage(true);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                child: getButton(Strings.personalFinanceManagement)),
             getButton(Strings.expenseTracker),
             getSkipButton()
           ],

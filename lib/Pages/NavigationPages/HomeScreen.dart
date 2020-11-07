@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:vm/Resources/Strings.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vm/sharedPrefrences/sharefPrefernces.dart';
 
 
 class HomeScreen extends StatefulWidget{
@@ -13,12 +14,25 @@ class HomeScreen extends StatefulWidget{
 
 class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin{
 
+  int _pageIndex=0;
   TabController _tabController;
+  bool _optionPage=false;
+
+  getDataFromPreferences()async {
+    SharedPref().getOptionalPage().then((value) {
+      if(value!=null){
+        setState(() {
+          _optionPage=value;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(length: 1, vsync: this);
+    getDataFromPreferences();
 
   }
   @override

@@ -181,7 +181,7 @@ class SignUpDetailsState extends State<SignUpDetails> {
           _scaffold.currentState.showSnackBar(
               SnackBar(content: Text("Email Already In Use By Other User")));
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Login()));
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
           break;
       }
       Navigator.pop(context);

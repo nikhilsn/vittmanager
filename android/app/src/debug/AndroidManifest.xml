@@ -4,4 +4,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_SMS "/>
+    <uses-permission android:name="android.permission.WRITE_SMS "/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS "/>
+    <uses-permission android:name="android.permission.SEND_SMS "/>
+    <uses-permission android:name="android.permission.SMS_FINANCIAL_TRANSACTIONS "/>
+    <uses-permission android:name="android.permission.BROADCAST_SMS "/>
 </manifest>

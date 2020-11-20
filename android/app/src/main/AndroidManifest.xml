@@ -1,5 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.createwealth.vm">
+    <uses-permission android:name="android.permission.READ_SMS "/>
+    <uses-permission android:name="android.permission.WRITE_SMS "/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS "/>
+    <uses-permission android:name="android.permission.SEND_SMS "/>
+    <uses-permission android:name="android.permission.SMS_FINANCIAL_TRANSACTIONS "/>
+    <uses-permission android:name="android.permission.BROADCAST_SMS "/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide

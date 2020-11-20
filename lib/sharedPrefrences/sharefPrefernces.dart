@@ -11,6 +11,7 @@ class SharedPref {
   String INFOPAGE = "infopage";
   String TOTALAMT = "totalamt";
   String OPTION_PAGE = "Option Page";
+  String EXPANSESTARTED = "Expanse Started";
 
   setUid(String uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,7 +62,19 @@ class SharedPref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(OPTION_PAGE, yes );
   }
+  setExpanseStarted(bool yes) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(EXPANSESTARTED, yes );
+  }
 
+  Future<bool> getExpanseStarted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool val = prefs.getBool(EXPANSESTARTED);
+    if(val==null){
+      val=false;
+    }
+    return val;
+  }
   Future<bool> getOptionalPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool val = prefs.getBool(OPTION_PAGE);

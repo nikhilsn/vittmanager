@@ -44,6 +44,11 @@ dev_dependencies:
   line_icons: ^0.2.0
   url_launcher: ^5.4.2
   sms: ^0.2.0
+  permission_handler: ^5.0.1+1
+  android_intent: ^0.3.7+6
+  percent_indicator: ^2.1.8
+  csv: ^4.1.0
+
 
 
 # For information on the generic Dart part of this file, see the

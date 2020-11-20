@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vm/Resources/Color.dart';
 import 'package:vm/Services/bottom_navigation_service.dart';
+import 'package:vm/Services/expanse_tracker_services.dart';
 import 'package:vm/Services/firebase_auth_services.dart';
 import 'package:vm/Services/option_page_service.dart';
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_)=>BottomNavigationService(),
+        ),
+        ChangeNotifierProvider(
+          create: (_)=>ExpanseTrackerServices(),
         )
       ],
       child: MaterialApp(
